@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sensor sht21 demo app</title>
+</head>
+<body>
+  <h1>Sensor sht21 demo app</h1>
+  <h2 th:text="'Last conditions is: temp: ' + ${lastConditions.getTemperature()} + ' humidity: ' +
+   ${lastConditions.getHumidity()} + ' for time: ' + ${lastConditions.getTimestamp()}"></h2>
+  <p th:text="'Time on the server is: ' + ${theDate}"></p>
+</body>
+</html>
