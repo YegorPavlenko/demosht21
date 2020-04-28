@@ -1,12 +1,15 @@
 package ua.com.it4biz.demosht21.controllers.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import ua.com.it4biz.demosht21.models.Measure;
 import ua.com.it4biz.demosht21.repositories.MeasureRepo;
+import ua.com.it4biz.demosht21.services.MeasureSrv;
 
-import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -17,10 +20,12 @@ public class MeasureRestCtrl {
   public static final String BASE_URL = "/api/measures";
 
   private final MeasureRepo measureRepo;
+  private final MeasureSrv measureSrv;
 
   @Autowired
-  public MeasureRestCtrl(MeasureRepo theMeasureRepo) {
+  public MeasureRestCtrl(MeasureRepo theMeasureRepo, MeasureSrv theMeasureSrv/*, SseSrv theSseSrv*/) {
     measureRepo = theMeasureRepo;
+    measureSrv = theMeasureSrv;
   }
 
   @GetMapping
@@ -36,9 +41,19 @@ public class MeasureRestCtrl {
   }
 
   @PostMapping
-  public int addMeasures(@RequestBody Measure theMeasure) {
+  public Mono<Void> addMeasures(@RequestBody Measure measure) {
 //    System.out.println(theMeasure);
-    return measureRepo.addMeasure(theMeasure);
+    measureSrv.addMeasure(measure);
+    return Mono.empty();
   }
 
+  @GetMapping(path = "/sse", produces =  MediaType.TEXT_EVENT_STREAM_VALUE)
+  public Flux<ServerSentEvent<Measure>> measureStream() {
+    return measureSrv.getMeasureStream()
+      .map(measure ->
+        ServerSentEvent
+          .builder(measure)
+          .event("measure")
+          .build());
+  }
 }

@@ -12,6 +12,8 @@ public class Demosht21Application {
 
 }
 
+// TODO SSE in index.html
+// TODO ? use R2DBC ?
 // TODO Expand REST API JSON answer
 // TODO Exceptions (Check input)
 // TODO more Unit tests
