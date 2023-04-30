@@ -1,4 +1,4 @@
-# Demo spring-boot timescaledb app
+# Demo spring-boot timescaledb app with Raspberry PI and I2C sensor
 
 Used timescaledb docker image from docker hub https://hub.docker.com/r/timescale/timescaledb timescale/timescaledb:latest-pg11  
 
